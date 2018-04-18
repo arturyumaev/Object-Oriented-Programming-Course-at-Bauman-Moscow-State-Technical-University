@@ -5,4 +5,6 @@
 #include <vector>
 #include <stdexcept>    // std::out_of_range
 
+#pragma once
+
 using namespace std;
