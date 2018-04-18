@@ -1,10 +1,9 @@
 #include <stdio.h>
 #include <iostream>
-#include <string.h>
+#include <string>
 #include <stdlib.h>
-#include <vector>
-#include <stdexcept>    // std::out_of_range
+#include <stdexcept> // std::out_of_range
 
-#pragma once
+#define UI unsigned int
 
 using namespace std;

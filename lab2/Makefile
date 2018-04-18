@@ -1,8 +1,7 @@
 build: compile run clear
 
-
-compile: *.cpp
-	c++ -std=c++0x -Wno-write-strings -o main.exe *.cpp
+compile: main.cpp
+	c++ -std=c++0x -Wno-write-strings -o main.exe main.cpp
 
 run: main.exe
 	./main.exe
