@@ -15,5 +15,26 @@ int main(int argc, char** argv)
 
     unitTest();
 
+    vector<int> v(5, 1);
+
+    cout << v.size() << v.capacity() << endl;
+
+    v.pop_back();
+
+    cout << v.size() << v.capacity() << endl;
+
+    v.shrink_to_fit();
+
+    cout << v.size() << v.capacity() << endl;
+
+    cout << "\n==========\n" << endl;
+
+    MyVector<int> b(10, 2);
+
+    for (int i = 0; i < 4; i++)
+    {
+        b.pop_back();
+    }
+
     return 0;
 }

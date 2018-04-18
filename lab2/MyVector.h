@@ -8,6 +8,7 @@ template <typename T> class MyVector
     private:
         T* _array;
         int _arraySize;
+        int _capacity;
     public:
         MyVector()
         {
@@ -30,9 +31,9 @@ template <typename T> class MyVector
 
         ~MyVector() // Maybe also done..
         {
-            if (_array != nullptr)
+            if (this->_array != nullptr)
             {
-                delete[] _array;
+                delete[] this->_array;
             }
         }
 
@@ -68,15 +69,20 @@ template <typename T> class MyVector
             return this->_arraySize;
         }
 
-        int capacity()
+        int capacity() // Done
         {
-
+            return this->capacity;
         }
 
         // Remove unusable memory
-        void shrink_to_fit()
+        void shrink_to_fit() // Done
         {
+            for (int i = this->_arraySize; i < this->_capacity; i++)
+            {
+                delete this->_array[i];
+            }
 
+            this->capacity = this->_arraySize;
         }
 
         bool empty() // Done
