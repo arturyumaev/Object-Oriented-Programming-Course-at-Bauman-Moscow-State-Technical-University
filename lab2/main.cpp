@@ -1,14 +1,3 @@
-/* TODO: написать шаблонный класс - мат вектор
- * сложение векторов
- * вычитание векторов
- * умножение на число
- * n-ая норма
- * модуль вектора
- * скалярное произведение
- * умножение векторов
- * взятие адреса :((
- */
-
 #include "stdafx.h"
 
 template <typename T>
@@ -34,18 +23,14 @@ class ndarray
             }
         }
 
-        ~ndarray()
+        ~ndarray() // Destructor
         {
             delete[] this->_ndarray;
         }
 
-        ndarray(const ndarray& object) // Copy constructor
+        template<typename N>
+        ndarray(const ndarray<N>& object) // Copy constructor
         {
-            if (this->_ndarray != nullptr)
-            {
-                delete[] this->_ndarray;
-            }
-
             this->_ndarray = new T[object.get_dim()];
             this->_dim = object.get_dim();
 
@@ -67,14 +52,15 @@ class ndarray
             }
         }
 
-        void operator = (const ndarray& object)
+        template <typename N>
+        void operator = (const ndarray<N>& object) // Done
         {
             if (this->_ndarray != nullptr)
             {
                 delete[] this->_ndarray;
             }
 
-            this->_ndarray = new T[object.get_dim()];
+            this->_ndarray = new N[object.get_dim()];
             this->_dim = object.get_dim();
 
             for (int i = 0; i < object.get_dim(); i++)
@@ -83,7 +69,8 @@ class ndarray
             }
         }
 
-        bool operator == (const ndarray& object) // Done
+        template <typename N>
+        bool operator == (const ndarray<N>& object) // Done
         {
             int condition_flag = 0;
 
@@ -102,7 +89,8 @@ class ndarray
             }
         }
 
-        bool operator < (const ndarray& object) // Done
+        template <typename N>
+        bool operator < (const ndarray<N>& object) // Done
         {
             int condition_flag = 0;
 
@@ -112,7 +100,7 @@ class ndarray
             }
             else
             {
-                if (this->pth_norm(2) >= object.pth_norm(2))
+                if (this->len() >= object.len())
                 {
                     return false;
                 }
@@ -121,7 +109,8 @@ class ndarray
             }
         }
 
-        bool operator > (const ndarray& object) // Done
+        template <typename N>
+        bool operator > (const ndarray<N>& object) // Done
         {
             int condition_flag = 0;
 
@@ -140,7 +129,8 @@ class ndarray
             }
         }
 
-        bool operator <= (const ndarray& object) // Done
+        template <typename N>
+        bool operator <= (const ndarray<N>& object) // Done
         {
             int condition_flag = 0;
 
@@ -159,7 +149,8 @@ class ndarray
             }
         }
 
-        bool operator >= (const ndarray& object) // Done
+        template <typename N>
+        bool operator >= (const ndarray<N>& object) // Done
         {
             int condition_flag = 0;
 
@@ -178,7 +169,8 @@ class ndarray
             }
         }
     
-        bool operator != (const ndarray& object) // Done
+        template <typename N>
+        bool operator != (const ndarray<N>& object) // Done
         {
             int condition_flag = 0;
 
@@ -235,12 +227,12 @@ class ndarray
             
         }
 
-        float len() // Done
+        float len() const // Done
         {
             return this->pth_norm(2);
         }
 
-        T at(int i) const 
+        T at(int i) const // Done
         {
             if (index_is_correct(i))
             {
@@ -265,6 +257,47 @@ class ndarray
         UI get_dim() const // Done
         {
             return this->_dim;
+        }
+
+        float cross (const ndarray& object) // Done
+        {
+            if (this->_dim != object.get_dim())
+            {
+                throw domain_error("dim of 1st != dim of 2nd");
+            }
+            else
+            {
+                float cross = 0;
+
+                for (int i = 0; i < this->get_dim(); i++)
+                {
+                    cross += (this->_ndarray[i] * object.at(i));
+                }
+
+                return cross;
+            }
+        }
+
+        bool is_orthogonal_to(const ndarray& object)
+        {
+            if (this->cross(object) == 0.0)
+            {
+                return true;
+            }
+            
+            return false;
+        }
+
+        void fill(UI index, T num) // Done
+        {
+            if (this->index_is_correct(index))
+            {
+                this->_ndarray[index] = num;
+            }
+            else
+            {
+                throw domain_error("Bad index or index out of range");
+            }
         }
 
     private:
@@ -299,19 +332,42 @@ class ndarray
         }        
 };
 
+void printStatus(int testIndex, bool status)
+{
+    if (status == true)
+    {
+        cout << "Test " << testIndex << " --- OK" << endl;
+    }
+    else
+    {
+        cout << "Test " << testIndex << " --- ERROR" << endl;
+    }
+}
+
+void UnitTest()
+{
+    ndarray<int> a(10, 1);
+    ndarray<float> b(5, 5);
+    ndarray<int> c(10, 3);
+    ndarray<float> d(4, 1);
+    ndarray<int> o1(2, 1);
+    ndarray<float> o2(o1);
+    o2.fill(0, -1.0);
+
+    (a.cross(c) == 30.0) ? printStatus(1, 1) : printStatus(1, 0);
+    (a == b) ? printStatus(2, 0) : printStatus(2, 1);
+    ((a[3] == 1) && (a.at(3) == 1)) ? printStatus(3, 1) : printStatus(3, 0);
+    (d.len() == 2) ? printStatus(4, 1) : printStatus(4, 0);
+    (~(d < a)) ? printStatus(5, 1) : printStatus(5, 0);
+    (a < c) ? printStatus(6, 1) : printStatus(6, 0);
+    (o1.is_orthogonal_to(o2)) ? printStatus(7, 1) : printStatus(7, 0);
+}
+
 int main(int argc, char** argv)
 {
     setlocale(LC_ALL, "ru");
 
-    ndarray<int> a(5, 1);
-
-    ndarray<int> b(6, 10);
-
-    a = b;
-
-    a.print();
-
-
+    UnitTest();
 
     return 0;
 }
