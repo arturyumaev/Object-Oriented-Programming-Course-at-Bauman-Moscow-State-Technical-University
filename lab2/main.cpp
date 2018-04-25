@@ -23,13 +23,8 @@ class ndarray
             }
         }
 
-        ~ndarray() // Destructor
-        {
-            delete[] this->_ndarray;
-        }
 
-        template<typename N>
-        ndarray(const ndarray<N>& object) // Copy constructor
+        ndarray(const ndarray<T>& object) // Copy constructor
         {
             this->_ndarray = new T[object.get_dim()];
             this->_dim = object.get_dim();
@@ -40,7 +35,13 @@ class ndarray
             }
         }
 
-        T operator [] (int i) // Done
+        ~ndarray() // Destructor
+        {
+            delete[] this->_ndarray;
+        }
+
+
+        T& operator [] (int i) // Done
         {
             if (index_is_correct(i))
             {
@@ -52,8 +53,19 @@ class ndarray
             }
         }
 
-        template <typename N>
-        void operator = (const ndarray<N>& object) // Done
+       const T& operator [] (int i) const // Done
+        {
+            if (index_is_correct(i))
+            {
+                return this->_ndarray[i];
+            }
+            else
+            {
+                throw overflow_error("Index out of range");
+            }
+        }
+
+        void operator = (const ndarray<T>& object) // Done
         {
             if (this->_ndarray != nullptr)
             {
@@ -227,7 +239,7 @@ class ndarray
             
         }
 
-        float len() const // Done
+        T len() const // Done
         {
             return this->pth_norm(2);
         }
@@ -329,7 +341,7 @@ class ndarray
             {
                 return false;
             }
-        }        
+        }
 };
 
 void printStatus(int testIndex, bool status)
