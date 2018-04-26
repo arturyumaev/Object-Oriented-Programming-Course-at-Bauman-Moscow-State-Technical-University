@@ -72,7 +72,7 @@ class ndarray
                 delete[] this->_ndarray;
             }
 
-            this->_ndarray = new N[object.get_dim()];
+            this->_ndarray = new T[object.get_dim()];
             this->_dim = object.get_dim();
 
             for (int i = 0; i < object.get_dim(); i++)
@@ -359,11 +359,11 @@ void printStatus(int testIndex, bool status)
 void UnitTest()
 {
     ndarray<int> a(10, 1);
-    ndarray<float> b(5, 5);
+    ndarray<int> b(5, 5);
     ndarray<int> c(10, 3);
-    ndarray<float> d(4, 1);
+    ndarray<int> d(4, 1);
     ndarray<int> o1(2, 1);
-    ndarray<float> o2(o1);
+    ndarray<int> o2(o1);
     o2.fill(0, -1.0);
 
     (a.cross(c) == 30.0) ? printStatus(1, 1) : printStatus(1, 0);
